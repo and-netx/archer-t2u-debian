@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# 99-wifi-power-save-off
+# Dispatcher de NetworkManager: apaga el power save de TODA interfaz wifi (wl*)
+# en cada conexion. Fix para adaptadores USB Realtek (Archer T2U PLUS, TL-WN823N,
+# etc.) que "se duermen" con el ahorro de energia y producen cortes / latencia alta.
+#
+# Instalar: sudo ./scripts/install-power-save-fix.sh
+# (o manualmente: copiar a /etc/NetworkManager/dispatcher.d/ y chmod +x)
+if [ "$2" = "up" ] || [ "$2" = "connectivity-change" ]; then
+    case "$1" in
+        wl*) /usr/sbin/iw dev "$1" set power_save off 2>/dev/null ;;
+    esac
+fi
